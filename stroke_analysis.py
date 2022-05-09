@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 
-df: DataFrame = pandas.read_csv(r"C:\Users\fwanguem\Downloads\welcome_pack_2022_v1\healthcare-dataset-stroke-data.csv")
+df: DataFrame = pandas.read_csv("healthcare-dataset-stroke-data.csv")
 df_array = df.to_numpy()
 
 print(100 * '-')
