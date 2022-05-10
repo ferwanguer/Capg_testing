@@ -16,13 +16,14 @@ discarding = pandas.isna(df["bmi"])
 
 print(100 * '-')
 # Análisis lógico
-Stroked_patients      = df_array[:, -1] == 1
+bmi_incomplete        = discarding.to_numpy()
+Stroked_patients      = (df_array[:, -1] == 1)
 Diseased_patients     = df_array[:, 4] == 1
 NStroked_patients     = sum(Stroked_patients)
 NNon_stroked_patients = sum(df_array[:, -1] == 0)
 Males                 = (df_array[:, 1] == "Male") | (df_array[:, 1] == "Other")
 Females               = df_array[:, 1] == "Female"
-bmi_incomplete        = discarding.to_numpy()
+
 
 print(sum(bmi_incomplete))
 P_stroked_pacients = NStroked_patients / (NNon_stroked_patients + NStroked_patients)
@@ -98,13 +99,17 @@ sorted_values = values[eig_order]
 total_variance = sum(sorted_values)
 sorted_vectors = vectors[:,eig_order]
 
+# We now make the following hypothesis: the eigenvector with the highest eigenvalue will act as the only feature (Simplification of the model)
 
+main_eigenvector = sorted_vectors[:,0:2]#[:,None]
 
+simplified_normalized_dataset = np.matmul(normalized_df_array_PCA,main_eigenvector)
 
+probando = normalized_df_array[:,-1] > 0
 
 print("***********************************************") # For debuging purposes
 
-#Results representation 
+#Results representation
 
 # EigenValues of the feature variables selected for the analysis.
 plt.scatter(np.arange(len(sorted_values)),sorted_values)
@@ -119,6 +124,16 @@ ax1.set_xticklabels(selected_atributes_name, rotation='vertical', fontsize=10)
 ax1.set_yticks(np.arange(6) + 0.5)
 ax1.set_yticklabels(selected_atributes_name, rotation='horizontal', fontsize=10)
 plt.show()
+
+#Results of the simplified study
+
+plt.scatter(simplified_normalized_dataset[~probando,0],simplified_normalized_dataset[~probando,1])
+plt.title("Simplified analysis")
+plt.show()
+
+
+
+#Histogram with probabilistic properties of the dataset
 
 fig, axs = plt.subplots(2, 2)
 
