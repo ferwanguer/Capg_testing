@@ -69,17 +69,17 @@ Young_patients_glucose = df_array[Young_patients, 8]
 df_array[Males, 1] = 0
 df_array[Females, 1] = 1
 
-df_array_cov_matrix = df_array[~bmi_incomplete, :]
-selected_atributes = [2, 3, 4, 8, 9,-1]
+df_array_cov_matrix     = df_array[~bmi_incomplete, :]
+selected_atributes      = [2, 3, 4, 8, 9,-1]
 selected_atributes_name = ['Gender','Age','hypertension','heart disease','glucose level','Stroke']
-df_array_cov_matrix = df_array_cov_matrix[:, selected_atributes]
+df_array_cov_matrix     = df_array_cov_matrix[:, selected_atributes]
 
 
 
 
-feat_means = np.mean(df_array_cov_matrix, axis=0)
+feat_means        = np.mean(df_array_cov_matrix, axis=0)
 centered_df_array = df_array_cov_matrix - feat_means
-std_df_array          = np.std(centered_df_array.astype(float), axis=0)
+std_df_array      = np.std(centered_df_array.astype(float), axis=0)
 
 #We now obtained the NORMALIZED dataset
 
@@ -101,11 +101,11 @@ sorted_vectors = vectors[:,eig_order]
 
 # We now make the following hypothesis: the eigenvector with the highest eigenvalue will act as the only feature (Simplification of the model)
 
-main_eigenvector = sorted_vectors[:,0:2]#[:,None]
+main_eigenvector = sorted_vectors#[:,0:-1] #[:,None]
 
 simplified_normalized_dataset = np.matmul(normalized_df_array_PCA,main_eigenvector)
 
-probando = normalized_df_array[:,-1] > 0
+stroked_PCA = normalized_df_array[:, -1] > 0
 
 print("***********************************************") # For debuging purposes
 
@@ -126,9 +126,16 @@ ax1.set_yticklabels(selected_atributes_name, rotation='horizontal', fontsize=10)
 plt.show()
 
 #Results of the simplified study
+fig_1 = plt.figure()
+ax_1  = fig_1.add_subplot(projection = '3d')
 
-plt.scatter(simplified_normalized_dataset[~probando,0],simplified_normalized_dataset[~probando,1])
-plt.title("Simplified analysis")
+ax_1.scatter(simplified_normalized_dataset[~stroked_PCA,0],normalized_df_array[~stroked_PCA,3],normalized_df_array[~stroked_PCA,4],label='NonStroked')
+ax_1.scatter(simplified_normalized_dataset[stroked_PCA, 0], normalized_df_array[stroked_PCA, 3], normalized_df_array[stroked_PCA, 4], label ='Stroked')
+ax_1.legend()
+ax_1.set_title("Simplified analysis")
+ax_1.set_xlabel('Main EigenVector')
+ax_1.set_ylabel('glucose')
+ax_1.set_zlabel('bmi')
 plt.show()
 
 
