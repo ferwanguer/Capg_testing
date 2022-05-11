@@ -100,12 +100,27 @@ total_variance = sum(sorted_values)
 sorted_vectors = vectors[:,eig_order]
 
 # We now make the following hypothesis: the eigenvector with the highest eigenvalue will act as the only feature (Simplification of the model)
-
-main_eigenvector = sorted_vectors#[:,0:-1] #[:,None]
+# This wa
+main_eigenvector = sorted_vectors#
 
 simplified_normalized_dataset = np.matmul(normalized_df_array_PCA,main_eigenvector)
 
 stroked_PCA = normalized_df_array[:, -1] > 0
+
+# Nearest centroid classifier with three features: highest eigenvalue, glucose level and bmi
+
+f_analysis_dataset = simplified_normalized_dataset# np.append(simplified_normalized_dataset,normalized_df_array_PCA[:,3:],axis=1)
+
+stroked_f_mean = np.mean(f_analysis_dataset[stroked_PCA,:],axis = 0)[:,None]
+non_stroked_f_mean = np.mean(f_analysis_dataset[~stroked_PCA,:],axis = 0)[:,None]
+
+function_weights = non_stroked_f_mean - stroked_f_mean
+function_beta    = 0.5 * np.matmul(non_stroked_f_mean.T,non_stroked_f_mean) - 0.5 * np.matmul(stroked_f_mean.T,stroked_f_mean)
+
+stroked_classification = np.matmul(f_analysis_dataset[stroked_PCA,:],function_weights) - function_beta
+non_stroked_classification= np.matmul(f_analysis_dataset[~stroked_PCA,:],function_weights) - function_beta
+stroke_prediction_success = sum(stroked_classification < 0)/len(stroked_classification)
+nonstroke_prediction_success = sum(non_stroked_classification > 0)/len(non_stroked_classification)
 
 print("***********************************************") # For debuging purposes
 
