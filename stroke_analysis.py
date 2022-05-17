@@ -6,6 +6,7 @@ import numpy as np
 import seaborn
 
 
+
 df: DataFrame = pandas.read_csv("healthcare-dataset-stroke-data.csv")
 df_array = df.to_numpy()
 
@@ -14,7 +15,7 @@ discarding = pandas.isna(df["bmi"])
 # Extracting the names of the head in the dataframe:
 
 
-print(100 * '-')
+
 # Análisis lógico
 bmi_incomplete        = discarding.to_numpy()
 Stroked_patients      = (df_array[:, -1] == 1)
@@ -25,7 +26,6 @@ Males                 = (df_array[:, 1] == "Male") | (df_array[:, 1] == "Other")
 Females               = df_array[:, 1] == "Female"
 
 
-print(sum(bmi_incomplete))
 P_stroked_pacients = NStroked_patients / (NNon_stroked_patients + NStroked_patients)
 
 Smokers = (df_array[:, 10] == 'smokes') | (df_array[:, 10] == 'formerly smoked')
@@ -37,7 +37,7 @@ P_stroked_smokers = N_Stroked_smokers / N_Smokers
 
 P_stroked_smokers = N_Stroked_smokers / NStroked_patients
 
-print(100 * '-')
+
 
 # Estudio de la edad
 Stroked_ages = df_array[Stroked_patients, 2]
