@@ -99,8 +99,7 @@ sorted_values = values[eig_order]
 total_variance = sum(sorted_values)
 sorted_vectors = vectors[:,eig_order]
 
-# We now make the following hypothesis: the eigenvector with the highest eigenvalue will act as the only feature (Simplification of the model)
-# This wa
+
 main_eigenvector = sorted_vectors#
 
 simplified_normalized_dataset = np.matmul(normalized_df_array_PCA,main_eigenvector)
