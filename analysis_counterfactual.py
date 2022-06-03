@@ -65,6 +65,6 @@ if __name__ == '__main__':
     #print(f' Prediction {model.predict(quer)}')
 
     counterfactuals = d.counterfactual_generator_dice(model, data, quer)
-    counterfactuals.visualize_as_dataframe()
+    counterfactuals.visualize_as_dataframe(show_only_changes=True)
 
     print('---Process ended---')
